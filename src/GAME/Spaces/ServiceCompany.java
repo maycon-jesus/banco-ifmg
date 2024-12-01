@@ -2,13 +2,9 @@ package GAME.Spaces;
 
 import GAME.Player;
 
-public class Property extends Space {
-	private String color;
-
-	public Property(String name, String color) {
+public class ServiceCompany extends Space {
+	public ServiceCompany(String name) {
 		super(name);
-		this.color = color;
-		this.purchasable = true;
 	}
 
 	@Override

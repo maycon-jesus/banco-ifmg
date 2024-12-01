@@ -1,7 +1,16 @@
 package GAME.Spaces;
 
+import GAME.Player;
+
 public abstract class Space {
+	protected boolean purchasable = false;
 	private String name;
 
-	abstract void onPlayerStop();
+	Space(String name) {
+		this.name = name;
+	}
+
+	abstract void onPlayerStop(Player player);
+
+	abstract void onPlayerGoesOver(Player player);
 }
