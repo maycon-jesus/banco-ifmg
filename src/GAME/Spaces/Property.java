@@ -1,5 +1,6 @@
 package GAME.Spaces;
 
+import GAME.Dice;
 import GAME.Player;
 
 public class Property extends Space {
@@ -12,12 +13,12 @@ public class Property extends Space {
 	}
 
 	@Override
-	void onPlayerStop(Player player) {
+	void onPlayerStop(Player player, Dice dice) {
 
 	}
 
 	@Override
-	void onPlayerGoesOver(Player player) {
+	void onPlayerGoesOver(Player player, Dice dice) {
 
 	}
 }
