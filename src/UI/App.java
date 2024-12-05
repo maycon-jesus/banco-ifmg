@@ -72,12 +72,12 @@ public class App {
 	}
 
 	private static String makeBoardSpaceTitle(Space[] board, int currentIndex) {
-		System.out.println(String.valueOf(currentIndex) + " - " + board[currentIndex].getName());
+		System.out.println(String.valueOf(currentIndex+1) + " - " + board[currentIndex].getName());
 		Space space = board[currentIndex];
 
-		if (space.getPlayers().isEmpty()) return String.valueOf(currentIndex);
+		if (space.getPlayers().isEmpty()) return String.valueOf(currentIndex+1);
 
-		StringBuilder title = new StringBuilder(String.valueOf(currentIndex) + " - ");
+		StringBuilder title = new StringBuilder(String.valueOf(currentIndex+1) + " - ");
 		for (Player p : space.getPlayers()) {
 			title.append(p.getEmoji());
 		}

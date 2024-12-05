@@ -9,12 +9,12 @@ public class ServiceCompany extends Space {
 	}
 
 	@Override
-	void onPlayerStop(Player player, Dice dice) {
+	public void onPlayerStop(Player player, Dice dice) {
 
 	}
 
 	@Override
-	void onPlayerGoesOver(Player player, Dice dice) {
+	public void onPlayerGoesOver(Player player, Dice dice) {
 
 	}
 }

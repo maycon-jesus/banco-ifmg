@@ -11,13 +11,13 @@ public class Luck extends Space {
 	}
 
 	@Override
-	void onPlayerStop(Player player, Dice dice) {
+	public void onPlayerStop(Player player, Dice dice) {
 		int value = Game.random.nextInt(-80, 151);
 		Bank.increasePlayerBalance(player, value);
 	}
 
 	@Override
-	void onPlayerGoesOver(Player player, Dice dice) {
+	public void onPlayerGoesOver(Player player, Dice dice) {
 
 	}
 }

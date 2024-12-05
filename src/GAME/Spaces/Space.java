@@ -9,14 +9,19 @@ public abstract class Space {
 	protected boolean purchasable = false;
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private String name;
+	private Space nextSpace;
 
 	Space(String name) {
 		this.name = name;
 	}
 
-	abstract void onPlayerStop(Player player, Dice dice);
+	public void setNextSpace(Space nextSpace) {
+		this.nextSpace = nextSpace;
+	}
 
-	abstract void onPlayerGoesOver(Player player, Dice dice);
+	public abstract void onPlayerStop(Player player, Dice dice);
+
+	public abstract void onPlayerGoesOver(Player player, Dice dice);
 
 	public void addPlayer(Player player) {
 		players.add(player);
@@ -36,5 +41,9 @@ public abstract class Space {
 
 	public String getName() {
 		return name;
+	}
+
+	public Space getNextSpace() {
+		return nextSpace;
 	}
 }

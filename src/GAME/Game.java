@@ -9,8 +9,10 @@ import java.util.Random;
 
 public class Game {
 	public static Random random = new Random();
+	public static int boardSize = 40;
 	private static Space[] board = new Space[40];
 	private static ArrayList<Player> players = new ArrayList<>();
+
 
 	public static void makeBoard() {
 		board[0] = new Start();
@@ -53,6 +55,40 @@ public class Game {
 		board[37] = new ServiceCompany("Companhia Ferroviária");
 		board[38] = new ServiceCompany("Companhia Ferroviária");
 		board[39] = new ServiceCompany("Companhia Ferroviária");
+		for(int i = 0;i<boardSize;i++){
+			int nextSpaceIndex = (i+1)%(boardSize);
+			board[i].setNextSpace(board[nextSpaceIndex]);
+		}
+	}
+	static Space findSpaceByPlayer(Player player){
+//		for(int i = 0; i< boardSize;i++){
+//			Space space = board[i];
+//			if(space.playerIsHere(player)) return new PlayerPosition(space, i);
+//		}
+		for(Space space:board){
+			if(space.playerIsHere(player)) return space;
+		}
+		return null;
+	}
+
+	public static void walkPlayer(Player player, Dice dice){
+		Space playerPositionFrom = findSpaceByPlayer(player);
+		Space playerPosition = playerPositionFrom;
+		assert playerPosition != null;
+
+		for(int i=0;i<dice.getDicesSum();i++){
+			playerPosition = playerPosition.getNextSpace();
+
+			if(i+1==dice.getDicesSum()){
+//				Quando o player para na casa
+				playerPosition.onPlayerStop(player,dice);
+				playerPosition.addPlayer(player);
+				playerPositionFrom.removePlayer(player);
+			}else{
+//				Quando o player passa por cima da casa mas não para
+				playerPosition.onPlayerGoesOver(player, dice);
+			}
+		}
 	}
 
 	public static void initGame() {
@@ -60,6 +96,8 @@ public class Game {
 		for (Player p : players) {
 			board[0].addPlayer(p);
 		}
+		App.printBoard();
+		walkPlayer(getLivePlayers().getFirst(), new Dice());
 		App.printBoard();
 	}
 
@@ -72,6 +110,14 @@ public class Game {
 
 	public static ArrayList<Player> getPlayers() {
 		return players;
+	}
+
+	public static ArrayList<Player> getLivePlayers() {
+		ArrayList<Player> playersLive = new ArrayList<>();
+		for(Player p:players){
+			if(p.getBalance() > 0) playersLive.add(p);
+		}
+		return playersLive;
 	}
 
 	public static Space[] getBoard() {
