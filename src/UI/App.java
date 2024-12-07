@@ -1,5 +1,6 @@
 package UI;
 
+import GAME.Dice;
 import GAME.Game;
 import GAME.Player;
 import GAME.Spaces.Space;
@@ -28,6 +29,11 @@ public class App {
 		menu();
 	}
 
+	public static void waitPlayerAction(String message) {
+		System.out.print(message);
+		scanner.nextLine();
+	}
+
 	public static void menu() {
 		ArrayList<Player> players = Game.getPlayers();
 		if (!players.isEmpty()) {
@@ -52,6 +58,19 @@ public class App {
 			}
 			case 2: {
 				Game.initGame();
+				App.printBoard();
+				while (Game.getLivePlayers().size() > 1) {
+					ArrayList<Player> livePlayers = Game.getLivePlayers();
+					for (Player player : livePlayers) {
+						waitPlayerAction("Vez do jogador " + player.getEmojiName() + "! Pressione enter para jogar o dado.");
+						Dice dice = new Dice();
+						Game.walkPlayer(player, dice);
+						App.printBoard();
+						if (player.getBalance() < 0) {
+							System.out.println("O jogador " + player.getEmojiName() + " foi eliminado por estar com saldo negativo!");
+						}
+					}
+				}
 				break;
 			}
 			default: {
@@ -72,12 +91,12 @@ public class App {
 	}
 
 	private static String makeBoardSpaceTitle(Space[] board, int currentIndex) {
-		System.out.println(String.valueOf(currentIndex+1) + " - " + board[currentIndex].getName());
+		System.out.println(String.valueOf(currentIndex + 1) + " - " + board[currentIndex].getName());
 		Space space = board[currentIndex];
 
-		if (space.getPlayers().isEmpty()) return String.valueOf(currentIndex+1);
+		if (space.getPlayers().isEmpty()) return String.valueOf(currentIndex + 1);
 
-		StringBuilder title = new StringBuilder(String.valueOf(currentIndex+1) + " - ");
+		StringBuilder title = new StringBuilder(String.valueOf(currentIndex + 1) + " - ");
 		for (Player p : space.getPlayers()) {
 			title.append(p.getEmoji());
 		}
@@ -91,7 +110,7 @@ public class App {
 		System.out.println("Legenda:");
 		System.out.println("- Jogadores:");
 		for (Player player : Game.getPlayers()) {
-			System.out.println(player.getEmoji() + " " + player.getName());
+			System.out.println(player.getEmoji() + " " + player.getName() + ": R$" + player.getBalance());
 		}
 
 		System.out.println("- Casas:");

@@ -18,16 +18,20 @@ public class Player {
 		return emoji;
 	}
 
+	public String getEmojiName() {
+		return emoji + name;
+	}
+
 	public int getBalance() {
 		return balance;
 	}
 
-	public int decreaseBalance(int value){
+	public int decreaseBalance(int value) {
 		balance -= value;
 		return balance;
 	}
 
-	public int increaseBalance(int value){
+	public int increaseBalance(int value) {
 		balance += value;
 		return balance;
 	}
