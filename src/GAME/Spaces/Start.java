@@ -11,7 +11,7 @@ public class Start extends Space {
 
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
-
+		Bank.increasePlayerBalance(player, 200);
 	}
 
 	@Override
