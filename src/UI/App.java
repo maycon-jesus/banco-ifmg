@@ -2,7 +2,9 @@ package UI;
 
 import GAME.Dice;
 import GAME.Game;
+import GAME.Messages;
 import GAME.Player;
+import GAME.Spaces.Property;
 import GAME.Spaces.Space;
 
 import java.util.ArrayList;
@@ -64,8 +66,22 @@ public class App {
 					for (Player player : livePlayers) {
 						waitPlayerAction("Vez do jogador " + player.getEmojiName() + "! Pressione enter para jogar o dado.");
 						Dice dice = new Dice();
-						Game.walkPlayer(player, dice);
+						Space spaceStopped = Game.walkPlayer(player, dice);
 						App.printBoard();
+						Messages.showAllMessagesStacked();
+						if(spaceStopped instanceof Property){
+
+							if(((Property) spaceStopped).isPurchasable()){
+								boolean buy = promptBooleanResponse("Deseja comprar essa propriedade?");
+								if(!buy) continue;
+								try{
+									((Property) spaceStopped).buyProperty(player);
+									System.out.println("Propriedade comprada com sucesso!");
+								}catch(Error err){
+									System.out.println(err.getMessage());
+								}
+							}
+						}
 						if (player.getBalance() < 0) {
 							System.out.println("O jogador " + player.getEmojiName() + " foi eliminado por estar com saldo negativo!");
 						}
@@ -90,13 +106,33 @@ public class App {
 		}
 	}
 
+	public static boolean promptBooleanResponse(String message) {
+		System.out.print(message+" (s/n)");
+		String resp = App.scanner.next();
+		if(resp.equals("s")){
+			return true;
+		}else if(resp.equals("n")){
+			return false;
+		}
+		return promptBooleanResponse(message);
+	}
+
 	private static String makeBoardSpaceTitle(Space[] board, int currentIndex) {
 		System.out.println(String.valueOf(currentIndex + 1) + " - " + board[currentIndex].getName());
 		Space space = board[currentIndex];
 
-		if (space.getPlayers().isEmpty()) return String.valueOf(currentIndex + 1);
 
-		StringBuilder title = new StringBuilder(String.valueOf(currentIndex + 1) + " - ");
+		StringBuilder title = new StringBuilder(String.valueOf(currentIndex + 1));
+
+		if(space instanceof Property){
+			if(((Property) space).getOwner() != null){
+				String ownerEmoji = ((Property) space).getOwner().getEmoji();
+				title.append(" [DONO: ").append(ownerEmoji).append("]");
+			}
+		}
+
+		if(!space.getPlayers().isEmpty()) title.append(" - ")
+
 		for (Player p : space.getPlayers()) {
 			title.append(p.getEmoji());
 		}

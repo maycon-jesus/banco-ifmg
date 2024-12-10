@@ -15,30 +15,30 @@ public class Game {
 
 	public static void makeBoard() {
 		board[0] = new Start();
-		board[1] = new Property("Leblon", "purple");
+		board[1] = new Property("Leblon", "purple", new int[]{80, 24, 240}, 8);
 		board[2] = new Luck();
-		board[3] = new Property("Avenida Presidente Vargas", "purple");
-		board[4] = new Property("Av. Nossa Sonhora de Copacabana", "purple");
-		board[5] = new ServiceCompany("Companhia Ferroviária");
-		board[6] = new ServiceCompany("Companhia Ferroviária");
-		board[7] = new ServiceCompany("Companhia Ferroviária");
-		board[8] = new ServiceCompany("Companhia Ferroviária");
-		board[9] = new ServiceCompany("Companhia Ferroviária");
-		board[10] = new ServiceCompany("Companhia Ferroviária");
-		board[11] = new ServiceCompany("Companhia Ferroviária");
-		board[12] = new ServiceCompany("Companhia Ferroviária");
-		board[13] = new ServiceCompany("Companhia Ferroviária");
-		board[14] = new ServiceCompany("Companhia Ferroviária");
-		board[15] = new ServiceCompany("Companhia Ferroviária");
-		board[16] = new ServiceCompany("Companhia Ferroviária");
-		board[17] = new ServiceCompany("Companhia Ferroviária");
-		board[18] = new ServiceCompany("Companhia Ferroviária");
-		board[19] = new ServiceCompany("Companhia Ferroviária");
-		board[20] = new ServiceCompany("Companhia Ferroviária");
-		board[21] = new ServiceCompany("Companhia Ferroviária");
-		board[22] = new ServiceCompany("Companhia Ferroviária");
-		board[23] = new ServiceCompany("Companhia Ferroviária");
-		board[24] = new ServiceCompany("Companhia Ferroviária");
+		board[3] = new Property("Avenida Presidente Vargas", "purple", new int[]{80, 18, 180}, 6);
+		board[4] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[5] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[6] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[7] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[8] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[9] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[10] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[11] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[12] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[13] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[14] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[15] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[16] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[17] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[18] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[19] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[20] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[21] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[22] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[23] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
+		board[24] = new Property("Av. Nossa Sonhora de Copacabana", "purple", new int[]{80, 21, 210}, 7);
 		board[25] = new ServiceCompany("Companhia Ferroviária");
 		board[26] = new ServiceCompany("Companhia Ferroviária");
 		board[27] = new ServiceCompany("Companhia Ferroviária");
@@ -71,7 +71,7 @@ public class Game {
 		return null;
 	}
 
-	public static void walkPlayer(Player player, Dice dice) {
+	public static Space walkPlayer(Player player, Dice dice) {
 		Space playerPositionFrom = findSpaceByPlayer(player);
 		Space playerPosition = playerPositionFrom;
 		assert playerPosition != null;
@@ -84,11 +84,14 @@ public class Game {
 				playerPosition.onPlayerStop(player, dice);
 				playerPosition.addPlayer(player);
 				playerPositionFrom.removePlayer(player);
+				return playerPosition;
 			} else {
 //				Quando o player passa por cima da casa mas não para
 				playerPosition.onPlayerGoesOver(player, dice);
 			}
 		}
+
+		throw new Error("ERROR IMPOSSIBLE 001");
 	}
 
 	public static void initGame() {
