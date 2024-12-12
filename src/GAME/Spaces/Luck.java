@@ -1,9 +1,6 @@
 package GAME.Spaces;
 
-import GAME.Bank;
-import GAME.Dice;
-import GAME.Game;
-import GAME.Player;
+import GAME.*;
 
 public class Luck extends Space {
 	public Luck() {
@@ -12,8 +9,18 @@ public class Luck extends Space {
 
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
-		int value = Game.random.nextInt(-80, 151);
-		Bank.increasePlayerBalance(player, value);
+		boolean winMoney = Game.random.nextBoolean();
+
+		if (winMoney) {
+			int value = Game.random.nextInt(1, 151);
+			Bank.increasePlayerBalance(player, value);
+			Messages.addMessage("Você parou no " + this.getName() + " e ganhou " + value);
+		} else {
+			int value = Game.random.nextInt(1, 81);
+			Bank.decreasePlayerBalance(player, value);
+			Messages.addMessage("Você parou no " + this.getName() + " e perdeu " + value);
+		}
+
 	}
 
 	@Override

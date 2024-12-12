@@ -71,6 +71,7 @@ public class Game {
 		return null;
 	}
 
+
 	public static Space walkPlayer(Player player, Dice dice) {
 		Space playerPositionFrom = findSpaceByPlayer(player);
 		Space playerPosition = playerPositionFrom;
@@ -81,9 +82,9 @@ public class Game {
 
 			if (i + 1 == dice.getDicesSum()) {
 //				Quando o player para na casa
-				playerPosition.onPlayerStop(player, dice);
 				playerPosition.addPlayer(player);
 				playerPositionFrom.removePlayer(player);
+				playerPosition.onPlayerStop(player, dice);
 				return playerPosition;
 			} else {
 //				Quando o player passa por cima da casa mas não para

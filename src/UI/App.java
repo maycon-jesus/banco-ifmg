@@ -64,23 +64,40 @@ public class App {
 				while (Game.getLivePlayers().size() > 1) {
 					ArrayList<Player> livePlayers = Game.getLivePlayers();
 					for (Player player : livePlayers) {
+						scanner.nextLine();
+
 						waitPlayerAction("Vez do jogador " + player.getEmojiName() + "! Pressione enter para jogar o dado.");
 						Dice dice = new Dice();
 						Space spaceStopped = Game.walkPlayer(player, dice);
 						App.printBoard();
+						System.out.println("Número que saiu no dado: " + dice.getDicesSum());
 						Messages.showAllMessagesStacked();
-						if(spaceStopped instanceof Property){
+						if (spaceStopped instanceof Property) {
+							Property property = (Property) spaceStopped;
 
-							if(((Property) spaceStopped).isPurchasable()){
-								boolean buy = promptBooleanResponse("Deseja comprar essa propriedade?");
-								if(!buy) continue;
-								try{
+							if (property.getOwner() == player && property.isUpgradable()) {
+								System.out.println("====[INFORMAÇÕES DA PROPRIEDADE]====");
+								System.out.println("Nome: " + spaceStopped.getName());
+								System.out.println("Valor do upgrade: R$" + property.getNextUpgradePrice());
+								boolean buy = promptBooleanResponse("Deseja fazer upgrade nessa propriedade? Você possui R$" + player.getBalance());
+							}
+
+							if (((Property) spaceStopped).isPurchasable()) {
+								System.out.println("====[INFORMAÇÕES DA PROPRIEDADE]====");
+								System.out.println("Nome: " + spaceStopped.getName());
+								System.out.println("Valor: R$" + ((Property) spaceStopped).getBuyValue());
+								boolean buy = promptBooleanResponse("Deseja comprar essa propriedade? Você possui R$" + player.getBalance());
+								if (!buy) continue;
+								try {
 									((Property) spaceStopped).buyProperty(player);
 									System.out.println("Propriedade comprada com sucesso!");
-								}catch(Error err){
+								} catch (Error err) {
 									System.out.println(err.getMessage());
 								}
 							}
+						} else {
+							System.out.println("====[INFORMAÇÕES DA CASA]====");
+							System.out.println("Nome: " + spaceStopped.getName());
 						}
 						if (player.getBalance() < 0) {
 							System.out.println("O jogador " + player.getEmojiName() + " foi eliminado por estar com saldo negativo!");
@@ -107,11 +124,11 @@ public class App {
 	}
 
 	public static boolean promptBooleanResponse(String message) {
-		System.out.print(message+" (s/n)");
+		System.out.print(message + " (s/n)");
 		String resp = App.scanner.next();
-		if(resp.equals("s")){
+		if (resp.equals("s")) {
 			return true;
-		}else if(resp.equals("n")){
+		} else if (resp.equals("n")) {
 			return false;
 		}
 		return promptBooleanResponse(message);
@@ -124,14 +141,14 @@ public class App {
 
 		StringBuilder title = new StringBuilder(String.valueOf(currentIndex + 1));
 
-		if(space instanceof Property){
-			if(((Property) space).getOwner() != null){
+		if (space instanceof Property) {
+			if (((Property) space).getOwner() != null) {
 				String ownerEmoji = ((Property) space).getOwner().getEmoji();
 				title.append(" [DONO: ").append(ownerEmoji).append("]");
 			}
 		}
 
-		if(!space.getPlayers().isEmpty()) title.append(" - ")
+		if (!space.getPlayers().isEmpty()) title.append(" - ");
 
 		for (Player p : space.getPlayers()) {
 			title.append(p.getEmoji());
