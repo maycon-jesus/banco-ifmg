@@ -12,6 +12,7 @@ public class Start extends Space {
 
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
+		super.onPlayerStop(player, dice);
 		Messages.addMessage("Você passou pela partida e recebeu R$200!");
 		Bank.increasePlayerBalance(player, 200);
 	}

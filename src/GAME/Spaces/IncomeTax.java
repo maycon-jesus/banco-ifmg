@@ -6,14 +6,15 @@ import GAME.Player;
 
 public class IncomeTax extends Space {
 
-	IncomeTax(Player player) {
+	public IncomeTax() {
 		super("Imposto de Renda");
 	}
 
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
+		super.onPlayerStop(player, dice);
 		player.decreaseBalance(200);
-		Messages.addMessage("Você teve que R$200 de imposto para o leão!");
+		Messages.addMessage("Você pagou R$200 de imposto para o leão!");
 	}
 
 	@Override

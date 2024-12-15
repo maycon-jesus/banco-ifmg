@@ -22,6 +22,7 @@ public class Property extends Space {
 
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
+		super.onPlayerStop(player, dice);
 		if (this.owner != null && player != this.owner) {
 			Bank.decreasePlayerBalance(player, this.getRentValue());
 			this.owner.increaseBalance(this.getRentValue());

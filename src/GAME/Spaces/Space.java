@@ -1,6 +1,7 @@
 package GAME.Spaces;
 
 import GAME.Dice;
+import GAME.Messages;
 import GAME.Player;
 
 import java.util.ArrayList;
@@ -15,11 +16,9 @@ public abstract class Space {
 		this.name = name;
 	}
 
-	public void setNextSpace(Space nextSpace) {
-		this.nextSpace = nextSpace;
+	public void onPlayerStop(Player player, Dice dice) {
+		Messages.addMessage("Você parou na casa " + this.name);
 	}
-
-	public abstract void onPlayerStop(Player player, Dice dice);
 
 	public abstract void onPlayerGoesOver(Player player, Dice dice);
 
@@ -45,5 +44,9 @@ public abstract class Space {
 
 	public Space getNextSpace() {
 		return nextSpace;
+	}
+
+	public void setNextSpace(Space nextSpace) {
+		this.nextSpace = nextSpace;
 	}
 }

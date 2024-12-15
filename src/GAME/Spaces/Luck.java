@@ -9,6 +9,7 @@ public class Luck extends Space {
 
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
+		super.onPlayerStop(player, dice);
 		boolean winMoney = Game.random.nextBoolean();
 
 		if (winMoney) {
