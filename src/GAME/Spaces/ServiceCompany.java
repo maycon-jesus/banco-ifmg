@@ -19,10 +19,10 @@ public class ServiceCompany extends Space {
 	@Override
 	public void onPlayerStop(Player player, Dice dice) {
 		super.onPlayerStop(player, dice);
-		if (this.owner != null && this.owner == player) {
+		if (this.owner != null && this.owner != player) {
 			int rentTotal = this.rentValue * dice.getDicesSum();
 			player.decreaseBalance(rentTotal);
-			Messages.addMessage("Você pagou R$" + rentTotal + " de aluguel para " + this.owner.getEmojiName() + "!");
+			Messages.addMessage("Você pagou R$" + rentTotal + " pelo uso da "+this.getName() +" para o jogador " + this.owner.getEmojiName() + "!");
 		}
 	}
 
@@ -46,5 +46,9 @@ public class ServiceCompany extends Space {
 		this.owner = owner;
 		Bank.decreasePlayerBalance(owner, this.getBuyValue());
 		return true;
+	}
+
+	public Player getOwner() {
+		return this.owner;
 	}
 }

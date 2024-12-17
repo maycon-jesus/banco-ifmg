@@ -6,18 +6,16 @@ import GAME.Messages;
 import GAME.Player;
 
 public class Property extends Space {
-	private String color;
 	private int upgrades = 0;
 	private Player owner = null;
-	private int[] upgradePrices = {};
-	private int rentValueBase = 0;
+	private final int[] rentValues;
+	private final int buyPrice;
 
-	public Property(String name, String color, int[] upgradePrices, int rentValueBase) {
+	public Property(String name,int buyPrice, int[] rentValues) {
 		super(name);
-		this.color = color;
 		this.purchasable = true;
-		this.upgradePrices = upgradePrices;
-		this.rentValueBase = rentValueBase;
+		this.buyPrice = buyPrice;
+		this.rentValues = rentValues;
 	}
 
 	@Override
@@ -36,24 +34,23 @@ public class Property extends Space {
 	}
 
 	public int getBuyValue() {
-		return this.upgradePrices[0];
+		return this.buyPrice;
 	}
 
 	public boolean isPurchasable() {
 		return this.owner == null;
 	}
 
-	public boolean buyProperty(Player owner) {
+	public void buyProperty(Player owner) {
 		if (!isPurchasable()) throw new Error("Esta propriedade ja possui um dono");
 		if (owner.getBalance() < this.getBuyValue()) throw new Error("Você não possui saldo suficiente!");
 
 		this.owner = owner;
 		Bank.decreasePlayerBalance(owner, this.getBuyValue());
-		return true;
 	}
 
 	public int getNextUpgradePrice() {
-		return upgradePrices[this.upgrades + 1];
+		return this.getRentValue();
 	}
 
 	public boolean isUpgradable() {
@@ -71,11 +68,19 @@ public class Property extends Space {
 	}
 
 	public int getRentValue() {
-		int sum = this.rentValueBase;
-		for (int i = 1; i < this.upgrades; i++) {
-			sum += this.upgradePrices[i];
-		}
-		return sum;
+		return this.rentValues[this.upgrades];
+	}
+
+	public String getUpgradeName(){
+		return switch (this.upgrades) {
+			case 1 -> "Pousada";
+			case 2 -> "Hotel";
+			default -> "Casa";
+		};
+	}
+
+	public int getUpgradeLevel(){
+		return this.upgrades;
 	}
 
 	public Player getOwner() {

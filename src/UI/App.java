@@ -5,6 +5,7 @@ import GAME.Game;
 import GAME.Messages;
 import GAME.Player;
 import GAME.Spaces.Property;
+import GAME.Spaces.ServiceCompany;
 import GAME.Spaces.Space;
 
 import java.util.ArrayList;
@@ -64,46 +65,67 @@ public class App {
 				while (Game.getLivePlayers().size() > 1) {
 					ArrayList<Player> livePlayers = Game.getLivePlayers();
 					for (Player player : livePlayers) {
-						scanner.nextLine();
-
 						waitPlayerAction("Vez do jogador " + player.getEmojiName() + "! Pressione enter para jogar o dado.");
 						Dice dice = new Dice();
 						Space spaceStopped = Game.walkPlayer(player, dice);
 						App.printBoard();
 						System.out.println("Número que saiu no dado: " + dice.getDicesSum());
 						Messages.showAllMessagesStacked();
-						if (spaceStopped instanceof Property) {
-							Property property = (Property) spaceStopped;
-
+						if (spaceStopped instanceof Property property) {
 							if (property.getOwner() == player && property.isUpgradable()) {
-								System.out.println("====[INFORMAÇÕES DA PROPRIEDADE]====");
+								System.out.println("====[INFORMAÇÕES DA SUA PROPRIEDADE]====");
 								System.out.println("Nome: " + spaceStopped.getName());
+								System.out.println("Nível de melhoria: " + property.getUpgradeName() + " "+ property.getUpgradeLevel()+"/2");
 								System.out.println("Valor do upgrade: R$" + property.getNextUpgradePrice());
-								boolean buy = promptBooleanResponse("Deseja fazer upgrade nessa propriedade? Você possui R$" + player.getBalance());
+								boolean confirmUpgrade = promptBooleanResponse("Deseja fazer upgrade nessa propriedade? Você possui R$" + player.getBalance());
+								if (!confirmUpgrade) continue;
+								try {
+									property.upgrade();
+									System.out.println("Melhoria realizada na propriedade com sucesso! Agora ela é um(a): "+property.getUpgradeName());
+								} catch (Error err) {
+									System.out.println(err.getMessage());
+								}
 							}
 
-							if (((Property) spaceStopped).isPurchasable()) {
-								System.out.println("====[INFORMAÇÕES DA PROPRIEDADE]====");
+							if (property.isPurchasable()) {
+								System.out.println("====[VENDE-SE]====");
 								System.out.println("Nome: " + spaceStopped.getName());
-								System.out.println("Valor: R$" + ((Property) spaceStopped).getBuyValue());
+								System.out.println("Valor: R$" + property.getBuyValue());
 								boolean buy = promptBooleanResponse("Deseja comprar essa propriedade? Você possui R$" + player.getBalance());
 								if (!buy) continue;
 								try {
-									((Property) spaceStopped).buyProperty(player);
+									property.buyProperty(player);
 									System.out.println("Propriedade comprada com sucesso!");
 								} catch (Error err) {
 									System.out.println(err.getMessage());
 								}
 							}
-						} else {
-							System.out.println("====[INFORMAÇÕES DA CASA]====");
-							System.out.println("Nome: " + spaceStopped.getName());
+						} else if(spaceStopped instanceof ServiceCompany serviceCompany) {
+							if(serviceCompany.isPurchasable()){
+								System.out.println("====[VENDE-SE]====");
+								System.out.println("Nome: " + spaceStopped.getName());
+								System.out.println("Valor: R$" + serviceCompany.getBuyValue());
+								boolean buy = promptBooleanResponse("Deseja comprar essa companhia? Você possui R$" + player.getBalance());
+								if (!buy) continue;
+								try {
+									serviceCompany.buyProperty(player);
+									System.out.println("Companhia comprada com sucesso!");
+								} catch (Error err) {
+									System.out.println(err.getMessage());
+								}
+							}
 						}
+
 						if (player.getBalance() < 0) {
 							System.out.println("O jogador " + player.getEmojiName() + " foi eliminado por estar com saldo negativo!");
 						}
+						System.out.println("----");
 					}
 				}
+
+				Player winner = Game.getLivePlayers().getFirst();
+				System.out.println("O JOGADOR "+winner.getName() + " VENCEU!");
+
 				break;
 			}
 			default: {
@@ -144,6 +166,12 @@ public class App {
 		if (space instanceof Property) {
 			if (((Property) space).getOwner() != null) {
 				String ownerEmoji = ((Property) space).getOwner().getEmoji();
+				title.append(" [DONO: ").append(ownerEmoji).append("]");
+			}
+		}
+		if (space instanceof ServiceCompany company) {
+			if (company.getOwner() != null) {
+				String ownerEmoji = company.getOwner().getEmoji();
 				title.append(" [DONO: ").append(ownerEmoji).append("]");
 			}
 		}

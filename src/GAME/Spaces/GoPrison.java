@@ -11,8 +11,9 @@ public class GoPrison extends Space {
 		super("Vá para a Prisão");
 	}
 
-	public void setPrisonSpace(Space prisonSpace) {
+	public GoPrison setPrisonSpace(Space prisonSpace) {
 		this.prisonSpace = prisonSpace;
+		return this;
 	}
 
 	@Override
