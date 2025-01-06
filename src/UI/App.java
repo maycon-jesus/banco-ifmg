@@ -33,8 +33,9 @@ public class App {
 	}
 
 	public static void waitPlayerAction(String message) {
-		System.out.print(message);
-		scanner.nextLine();
+		System.out.println(message);
+		String resp = scanner.nextLine();
+		if (!resp.equalsIgnoreCase("n")) waitPlayerAction(message);
 	}
 
 	public static void menu() {
@@ -54,6 +55,9 @@ public class App {
 
 		int choice = scanner.nextInt();
 		switch (choice) {
+			case 0: {
+				System.exit(0);
+			}
 			case 1: {
 				promptNewUser();
 				menu();
@@ -65,7 +69,7 @@ public class App {
 				while (Game.getLivePlayers().size() > 1) {
 					ArrayList<Player> livePlayers = Game.getLivePlayers();
 					for (Player player : livePlayers) {
-						waitPlayerAction("Vez do jogador " + player.getEmojiName() + "! Pressione enter para jogar o dado.");
+						waitPlayerAction("Vez do jogador " + player.getEmojiName() + "! Pressione \"n\" + enter para jogar o dado.");
 						Dice dice = new Dice();
 						Space spaceStopped = Game.walkPlayer(player, dice);
 						App.printBoard();
@@ -75,13 +79,13 @@ public class App {
 							if (property.getOwner() == player && property.isUpgradable()) {
 								System.out.println("====[INFORMAÇÕES DA SUA PROPRIEDADE]====");
 								System.out.println("Nome: " + spaceStopped.getName());
-								System.out.println("Nível de melhoria: " + property.getUpgradeName() + " "+ property.getUpgradeLevel()+"/2");
+								System.out.println("Nível de melhoria: " + property.getUpgradeName() + " " + property.getUpgradeLevel() + "/2");
 								System.out.println("Valor do upgrade: R$" + property.getNextUpgradePrice());
 								boolean confirmUpgrade = promptBooleanResponse("Deseja fazer upgrade nessa propriedade? Você possui R$" + player.getBalance());
 								if (!confirmUpgrade) continue;
 								try {
 									property.upgrade();
-									System.out.println("Melhoria realizada na propriedade com sucesso! Agora ela é um(a): "+property.getUpgradeName());
+									System.out.println("Melhoria realizada na propriedade com sucesso! Agora ela é um(a): " + property.getUpgradeName());
 								} catch (Error err) {
 									System.out.println(err.getMessage());
 								}
@@ -100,8 +104,8 @@ public class App {
 									System.out.println(err.getMessage());
 								}
 							}
-						} else if(spaceStopped instanceof ServiceCompany serviceCompany) {
-							if(serviceCompany.isPurchasable()){
+						} else if (spaceStopped instanceof ServiceCompany serviceCompany) {
+							if (serviceCompany.isPurchasable()) {
 								System.out.println("====[VENDE-SE]====");
 								System.out.println("Nome: " + spaceStopped.getName());
 								System.out.println("Valor: R$" + serviceCompany.getBuyValue());
@@ -124,7 +128,7 @@ public class App {
 				}
 
 				Player winner = Game.getLivePlayers().getFirst();
-				System.out.println("O JOGADOR "+winner.getName() + " VENCEU!");
+				System.out.println("O JOGADOR " + winner.getName() + " VENCEU!");
 
 				break;
 			}

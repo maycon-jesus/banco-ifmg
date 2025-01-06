@@ -15,11 +15,11 @@ public class Luck extends Space {
 		if (winMoney) {
 			int value = Game.random.nextInt(1, 151);
 			Bank.increasePlayerBalance(player, value);
-			Messages.addMessage("Você parou no " + this.getName() + " e ganhou " + value);
+			Messages.addMessage("Você parou no " + this.getName() + " e ganhou R$" + value);
 		} else {
 			int value = Game.random.nextInt(1, 81);
 			Bank.decreasePlayerBalance(player, value);
-			Messages.addMessage("Você parou no " + this.getName() + " e perdeu " + value);
+			Messages.addMessage("Você parou no " + this.getName() + " e perdeu R$" + value);
 		}
 
 	}
